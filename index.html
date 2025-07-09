@@ -100,15 +100,6 @@
           </select>
         </td>
       </tr>
-      <!--<tr id="metatype-row" style="display:none"> -->
-      <tr id="metatype-row">
-        <td>Choose Metatype</td>
-        <td>
-            <select name="metatype-choice" id="metatype-choice">
-                <option value="">-- Select Metatype --</option>
-            </select>
-        </td>
-      </tr>
       <tr>
         <td>Attributes</td>
         <td>
@@ -169,6 +160,28 @@
   <div class="output" id="output">
     <strong>Selection Summary:</strong><br>
     No selections made yet.
+  </div>
+
+  <div class="selections" id="selections">
+    <h2>Selections</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Selection</th>
+                <th>Selector</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="metatype-row" style="display: none;">
+                <td>Choose Metatype</td>
+                <td>
+                    <select name="metatype-choice" id="metatype-choice">
+                        <option value="">-- Select Metatype --</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
   </div>
 
   <script>
