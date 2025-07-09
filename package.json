@@ -1,0 +1,12 @@
+{
+  "name": "shadowrun-character-utility",
+  "version": "1.0.0",
+  "description": "An HTML and Javascript application for doing Shadowrun stuff",
+  "license": "ISC",
+  "author": "Anthony Gaff",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

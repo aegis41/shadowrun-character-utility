@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shadowrun Priorities Selector</title>
+  <style>
+    body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 2rem auto;
+    max-width: 720px;
+    line-height: 1.4;
+    color: #222;
+    }
+
+    h1 {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    }
+
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    background: #fdfdfd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    th {
+    background: #efefef;
+    padding: 0.6rem;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.95rem;
+    }
+
+    td {
+    border-top: 1px solid #ddd;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.95rem;
+    text-align: left;
+    }
+
+    td select {
+    width: 100%;
+    padding: 0.3rem;
+    font-size: 0.95rem;
+    }
+
+    button {
+    display: block;
+    margin: 1rem auto 1.5rem auto;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background: #2e86ab;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    }
+
+    button:hover {
+    background: #256d8c;
+    }
+
+    .output {
+    border-left: 4px solid #2e86ab;
+    background: #f0f7fb;
+    padding: 1rem;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Shadowrun Sixth World Priority Selector</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Select Priority (A–E)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Metatype</td>
+        <td>
+          <select id="metatype-select">
+            <option value="">-- Select --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
+      </tr>
+      <!--<tr id="metatype-row" style="display:none"> -->
+      <tr id="metatype-row">
+        <td>Choose Metatype</td>
+        <td>
+            <select name="metatype-choice" id="metatype-choice">
+                <option value="">-- Select Metatype --</option>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Attributes</td>
+        <td>
+          <select id="attributes-select">
+            <option value="">-- Select --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Skills</td>
+        <td>
+          <select id="skills-select">
+            <option value="">-- Select --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Magic/Resonance</td>
+        <td>
+          <select id="magic-select">
+            <option value="">-- Select --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Resources</td>
+        <td>
+          <select id="resources-select">
+            <option value="">-- Select --</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button onclick="updateOutput()">Update Summary</button>
+
+  <div class="output" id="output">
+    <strong>Selection Summary:</strong><br>
+    No selections made yet.
+  </div>
+
+  <script>
+    const selectors = [
+        document.getElementById('metatype-select'),
+        document.getElementById('attributes-select'),
+        document.getElementById('magic-select'),
+        document.getElementById('skills-select'),
+        document.getElementById('resources-select')
+    ];
+
+    // Function to update dropdowns
+    function updateDropdowns() {
+        console.clear();
+        console.log("Updating Dropdowns");
+
+        // Gather current selections
+        const selectedValues = selectors.map(sel => sel.value);
+        console.log(selectedValues);
+
+        // For each selector, reset all the options to enabled
+        selectors.forEach((currentSel, idx) => {
+            const currentValue =  currentSel.value;
+
+            Array.from(currentSel.options).forEach(option => {
+                if (option.value === "") return; // skip placeholder
+                option.disabled = false; //reset all options
+            });
+
+            // Disable values already used in other selectors
+            selectors.forEach((otherSel, otherIdx) => {
+                if (idx === otherIdx) return; // skip self
+                const usedValue = otherSel.value;
+                if (usedValue) {
+                    const optionToDisable = currentSel.querySelector(`option[value="${usedValue}"]`);
+                    if (optionToDisable) {
+                        optionToDisable.disabled = true;
+                    }
+                }
+            });
+
+            // Ensure the current selected value is still enabled
+            const selectedOption = currentSel.querySelector(`option[value="${currentValue}"]`);
+            if (selectedOption) {
+                selectedOption.disabled = false;
+            }
+        });
+        updateMetatypeOptions();
+    }
+
+    // FUNCTIONS FOR ADDING OPTIONS
+    function updateMetatypeOptions() {
+        const priority = document.getElementById('metatype-select').value;
+        const metatypeRow = document.getElementById('metatype-row');
+        const metatypeSelect = document.getElementById('metatype-choice');
+
+        // Hide row if no priorty is selected
+        if (!priority || !priorityData.metatype[priority]) {
+            metatypeRow.style.display = 'none';
+            metatypeSelect.innerHTML = '<option value="">-- Select Metatype --</option>';
+            return;
+        }
+
+        // show the row
+        metatypeRow.style.display = '';
+
+        // get options and rebuild dropdown
+        const allowedTypes = priorityData.metatype[priority].options;
+
+        // clear existing options
+        metatypeSelect.innerHTML = '<option value="">-- Select Metatype --</option>';
+
+        // Add new options
+        allowedTypes.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            metatypeSelect.appendChild(option);
+
+        });
+    }
+
+
+
+    // Attach the listener and run once at page load
+    selectors.forEach(sel => {
+        sel.addEventListener('change', updateDropdowns);
+    });
+
+    // Priority Selection Display Values
+    const priorityData = {
+        metatype: {
+            A: { adjustmentPoints: 13, options: ['Ork', 'Dwarf', 'Troll'] },
+            B: { adjustmentPoints: 11, options: ['Elf', 'Ork', 'Dwarf', 'Troll'] },
+            C: { adjustmentPoints: 9, options: ['Human', 'Elf', 'Ork', 'Dwarf', 'Troll'] },
+            D: { adjustmentPoints: 4, options: ['Human', 'Elf', 'Ork', 'Dwarf', 'Troll'] },
+            E: { adjustmentPoints: 1, options: ['Human', 'Elf', 'Ork', 'Dwarf', 'Troll'] },
+        },
+        attributes: {
+            A: { points: 24 },
+            B: { points: 16 },
+            C: { points: 12 },
+            D: { points: 8 },
+            E: { points: 2 },
+        },
+        magic: {
+            A: { full: 4, aspected: 5, mystic: 4, adept: 4, technomancer: 4 },
+            B: { full: 3, aspected: 4, mystic: 3, adept: 3, technomancer: 3 },
+            C: { full: 2, aspected: 3, mystic: 2, adept: 2, technomancer: 2 },
+            D: { full: 1, aspected: 2, mystic: 1, adept: 1, technomancer: 1 },
+            E: { full: 0, aspected: 0, mystic: 0, adept: 0, technomancer: 0 },
+        },
+        skills: {
+            A: { skillPoints: 32 },
+            B: { skillPoints: 24 },
+            C: { skillPoints: 28 },
+            D: { skillPoints: 16 },
+            E: { skillPoints: 10 },
+        },
+        resources: {
+            A: { nuyen: 450000 },
+            B: { nuyen: 275000 },
+            C: { nuyen: 150000 },
+            D: { nuyen: 50000 },
+            E: { nuyen: 8000 },
+        }
+    };
+
+    function getMetatypeDisplay(priority) {
+        const data = priorityData.metatype[priority]; 
+        if (!data) return "No selection made.";
+        const typesList = data.options.join(', ');
+        return `Metatypes: ${typesList} (${data.adjustmentPoints})`;
+        // Metatypes: Human, Elf, Ork, Dwarf, Troll (1)
+    }
+
+    function getAttributesDisplay(priority) {
+        const data = priorityData.attributes[priority];
+        if (!data) return "No selection made.";
+        return `Attributes: ${data.points} attribute points`;
+        // Attributes: 24 attribute points
+    }
+
+    function getResourcesDisplay(priority) {
+        const data = priorityData.resources[priority];
+        if (!data) return "No selection made.";
+        return `Resources: ¥${data.nuyen.toLocaleString()}`;
+    }
+
+    function getSkillsDisplay(priority) {
+        const data = priorityData.skills[priority];
+        if (!data) return "No selection made.";
+        return `Skills: ${data.skillPoints} skill points`;
+    }
+
+    function getMagicDisplay(priority) {
+        const data = priorityData.magic[priority];
+        if (!data) return "No selection made.";
+
+        const types = Object.entries(data)
+            .map(([type, value]) => `${capitalize(type)} (${value})`)
+            .join(', ');
+
+        return `Magic/Resonance: ${types}`;
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Update the OUTPUT DIV
+    function updateOutput() {
+        const output = document.getElementById("output");
+
+        const formatterFunctions = [
+            getMetatypeDisplay,
+            getAttributesDisplay,
+            getSkillsDisplay,
+            getMagicDisplay,
+            getResourcesDisplay
+        ];
+
+        const lines = selectors.map((sel, index) => {
+            const value = sel.value;
+            const formatter = formatterFunctions[index];
+            return formatter(value);
+        })
+
+        const html = `<strong>Selection Summary:</strong><br>${lines.join('<br>')}`;
+        output.innerHTML = html;
+
+    }
+
+    updateDropdowns();
+
+</script>
+
+</body>
+</html>
