@@ -180,6 +180,14 @@
                     </select>
                 </td>
             </tr>
+            <tr id="magic-type-row" style="display: none;">
+                <td>Choose Magic Type</td>
+                <td>
+                    <select name="magic-user-choice" id="magic-user-choice">
+                        <option value="">-- Select Magic Type --</option>
+                    </select>
+                </td>
+            </tr>
         </tbody>
     </table>
   </div>
@@ -230,6 +238,7 @@
             }
         });
         updateMetatypeOptions();
+        updateMagicOptions();
     }
 
     // FUNCTIONS FOR ADDING OPTIONS
@@ -261,6 +270,30 @@
             option.textContent = type;
             metatypeSelect.appendChild(option);
 
+        });
+    }
+
+    function updateMagicOptions() {
+        const priority = document.getElementById('magic-select').value;
+        const magicRow = document.getElementById('magic-type-row');
+        const magicSelect = document.getElementById('magic-user-choice');
+
+        if (!priority || !priorityData.magic[priority]) {
+            magicRow.style.display = 'none';
+            magicSelect.innerHTML = '<option value="">-- Select Magic Type --</option>';
+            return;
+        }
+
+        magicRow.style.display = '';
+
+        const types = Object.keys(priorityData.magic[priority]);
+        magicSelect.innerHTML = '<option value="">-- Select Magic Type --</option>';
+
+        types.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = capitalize(type);
+            magicSelect.appendChild(option);
         });
     }
 
