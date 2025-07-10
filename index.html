@@ -156,6 +156,7 @@
   </table>
 
   <button onclick="updateOutput()">Update Summary</button>
+  <button onclick="resetAll()">Reset All</button>
 
   <div class="output" id="output">
     <strong>Selection Summary:</strong><br>
@@ -237,8 +238,8 @@
                 selectedOption.disabled = false;
             }
         });
-        updateMetatypeOptions();
-        updateMagicOptions();
+        // updateMetatypeOptions();
+        // updateMagicOptions();
     }
 
     // FUNCTIONS FOR ADDING OPTIONS
@@ -297,7 +298,27 @@
         });
     }
 
+    // RESET ALL LOGIC
+    function resetAll() {
+        // clear all priority selectors
+        selectors.forEach(sel => {
+            sel.value = "";
+        });
 
+        // clear choice selectors
+        document.getElementById("metatype-choice").innerHTML = '<option value="">-- Select Metatype --</option>';
+        document.getElementById("magic-user-choice").innerHTML = '<option value="">-- Select Magic Type --</option>';
+
+        // hide sub-choice rows
+        document.getElementById("metatype-row").style.display = "none";
+        document.getElementById("magic-type-row").style.display = "none";
+
+        // clear output box
+        document.getElementById("output").innerHTML = "<strong>Selection Summary:</strong><br>No selections made yet.";
+
+        // reset priority availability and summary
+        updateDropdowns();
+    }
 
     // Attach the listener and run once at page load
     selectors.forEach(sel => {
@@ -405,7 +426,8 @@
 
         const html = `<strong>Selection Summary:</strong><br>${lines.join('<br>')}`;
         output.innerHTML = html;
-
+        updateMetatypeOptions();
+        updateMagicOptions();
     }
 
     updateDropdowns();
