@@ -193,6 +193,76 @@
     </table>
   </div>
 
+  <div class="attributes" id="attributes">
+    <h2>Attributes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Attribute</th>
+                <th>Base 1</th>
+                <th>Points Added</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Body</td>
+                <td>1</td>
+                <td><input type="number" name="body-points" id="body-points" min="0" max="10"></td>
+                <td id="body-total"></td>
+            </tr>
+            <tr>
+                <td>Agility</td>
+                <td>1</td>
+                <td><input type="number" name="agility-points" id="agility-points" min="0" max="10"></td>
+                <td id="agility-total"></td>
+            </tr>
+            <tr>
+                <td>Reaction</td>
+                <td>1</td>
+                <td><input type="number" name="reaction-points" id="reaction-points" min="0" max="10"></td>
+                <td id="reaction-total"></td>
+            </tr>
+            <tr>
+                <td>Strength</td>
+                <td>1</td>
+                <td><input type="number" name="strength-points" id="strength-points" min="0" max="10"></td>
+                <td id="strength-total"></td>
+            </tr>
+            <tr>
+                <td>Willpower</td>
+                <td>1</td>
+                <td><input type="number" name="willpower-points" id="willpower-points" min="0" max="10"></td>
+                <td id="willpower-total"></td>
+            </tr>
+            <tr>
+                <td>Logic</td>
+                <td>1</td>
+                <td><input type="number" name="logic-points" id="logic-points" min="0" max="10"></td>
+                <td id="logic-total"></td>
+            </tr>
+            <tr>
+                <td>Intuition</td>
+                <td>1</td>
+                <td><input type="number" name="intuition-points" id="intuition-points" min="0" max="10"></td>
+                <td id="intuition-total"></td>
+            </tr>
+            <tr>
+                <td>Charisma</td>
+                <td>1</td>
+                <td><input type="number" name="charisma-points" id="charisma-points" min="0" max="10"></td>
+                <td id="charisma-total"></td>
+            </tr>
+            <tr>
+                <td>Edge</td>
+                <td>1</td>
+                <td><input type="number" name="edge-points" id="edge-points" min="0" max="10"></td>
+                <td id="edge-total"></td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
   <script>
     const selectors = [
         document.getElementById('metatype-select'),
@@ -200,6 +270,30 @@
         document.getElementById('magic-select'),
         document.getElementById('skills-select'),
         document.getElementById('resources-select')
+    ];
+
+    const attributeInputs = [
+        document.getElementById('body-points'),
+        document.getElementById('agility-points'),
+        document.getElementById('reaction-points'),
+        document.getElementById('strength-points'),
+        document.getElementById('willpower-points'),
+        document.getElementById('logic-points'),
+        document.getElementById('intuition-points'),
+        document.getElementById('charisma-points'),
+        document.getElementById('edge-points')
+    ];
+
+    const attributeTotals = [
+        document.getElementById('body-total'),
+        document.getElementById('agility-total'),
+        document.getElementById('reaction-total'),
+        document.getElementById('strength-total'),
+        document.getElementById('willpower-total'),
+        document.getElementById('logic-total'),
+        document.getElementById('intuition-total'),
+        document.getElementById('charisma-total'),
+        document.getElementById('edge-total')
     ];
 
     // Function to update dropdowns
@@ -238,8 +332,6 @@
                 selectedOption.disabled = false;
             }
         });
-        // updateMetatypeOptions();
-        // updateMagicOptions();
     }
 
     // FUNCTIONS FOR ADDING OPTIONS
@@ -293,8 +385,16 @@
         types.forEach(type => {
             const option = document.createElement('option');
             option.value = type;
-            option.textContent = capitalize(type);
+            option.textContent = capitalize(type) + " - " + priorityData["magic"][priority][type];
             magicSelect.appendChild(option);
+        });
+    }
+
+    // Function to update Attribute Totals
+    function updateAttributeTotals() {
+        attributeInputs.forEach((input, index) => {
+            const added = parseInt(input.value, 10) || 0;
+            attributeTotals[index].textContent = 1 + added;
         });
     }
 
@@ -323,6 +423,11 @@
     // Attach the listener and run once at page load
     selectors.forEach(sel => {
         sel.addEventListener('change', updateDropdowns);
+    });
+
+    // Attach Attributes Totals event listeners
+    attributeInputs.forEach(input => {
+        input.addEventListener('input', updateAttributeTotals);
     });
 
     // Priority Selection Display Values
